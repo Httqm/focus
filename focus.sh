@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
-# So far, this script just handles
-#	- 1 pomodoro
-#	- no break
+# Help me focus by 'deconnecting' from :
+# - emails
+# - corporate messaging / chat
+# - my smarphone (which must be connected via USB to the computer)
+#
+# ... and connecting back to these after a configured duration
 
+focusDurationMinutes=25
 listOfApplicationsToSilence='teams thunderbird'
-durationMinutesPomodoro=25
-#durationMinutesBreakShort=5
-#durationMinutesBreakLong=20
 
 soundStart=/usr/share/sounds/sound-icons/trumpet-12.wav
 soundStop=/usr/share/sounds/sound-icons/finish
@@ -155,7 +156,7 @@ main() {
 		*)	# anything else, normal mode
 #			echo "'normal' mode"
 			enterFocusMode
-			sleep "$durationMinutesPomodoro"m
+			sleep "$focusDurationMinutes"m
 #			sleep 10
 			leaveFocusMode
 			;;
