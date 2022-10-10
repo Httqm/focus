@@ -13,6 +13,10 @@ soundStart=/usr/share/sounds/sound-icons/trumpet-12.wav
 soundStop=/usr/share/sounds/sound-icons/finish
 soundStopEmergency=/usr/share/sounds/sound-icons/prompt
 
+# see /usr/share/icons/Humanity/status/22
+notificationIconAvailable='user-available'	# icon name without path nor extension
+notificationIconBusy='user-busy'			# icon name without path nor extension
+
 
 trap emergencyExit SIGINT	# on CTRL-c
 
@@ -51,12 +55,12 @@ displayNotification() {
 		enterDnDMode)
 			notificationMessage="Entering 'Do Not Disturb' mode"
 			shellMessage="${notificationMessage}\nHit 'CTRL-c' for an emergency exit."
-			icon='user-busy'	# see /usr/share/icons/Humanity/status/22
+			icon="$notificationIconBusy"
 			;;
 		leaveDnDMode)
 			notificationMessage='Leaving "Do Not Disturb" mode'
 			shellMessage="${notificationMessage}"
-			icon='user-available'	# see /usr/share/icons/Humanity/status/22
+			icon="$notificationIconAvailable"
 			;;
 	esac
 	echo -e "$shellMessage"
@@ -127,11 +131,35 @@ leaveFocusMode() {
 	}
 
 
-main() {
-	enterFocusMode
-	sleep "$durationMinutesPomodoro"m
-#	sleep 10
-	leaveFocusMode
+checKFilesExist() {
+	for requiredFile in "$soundStart" "$soundStop" "$soundStopEmergency"; do
+		[ -e "$requiredFile" ] || echo "Missing sound file '$requiredFile'"
+	done
+
+	for iconName in "$notificationIconAvailable" "$notificationIconBusy"; do
+		nbResults=$(find /usr/share/icons/ -type f -iname "*$iconName*" | wc -l)
+		[ "$nbResults" -lt 1 ] && echo "Found no icon named '$iconName'." || :
+	done
 	}
 
-main
+
+main() {
+	case "$1" in
+		'-c')
+			# check mode
+			# This mode is used to make sure none of the expected files
+			# (sounds, icons, ...) is missing.
+			echo "'check' mode (no error below means 'OK')"
+			checKFilesExist
+			;;
+		*)	# anything else, normal mode
+#			echo "'normal' mode"
+			enterFocusMode
+			sleep "$durationMinutesPomodoro"m
+#			sleep 10
+			leaveFocusMode
+			;;
+	esac
+	}
+
+main "$@"
