@@ -8,7 +8,7 @@
 # ... and connecting back to these after a configured duration
 
 focusDurationMinutes=25
-listOfApplicationsToSilence='teams thunderbird'
+listOfApplicationsToSilence='teams evolution'
 
 soundStart=/usr/share/sounds/sound-icons/trumpet-12.wav
 soundStop=/usr/share/sounds/sound-icons/finish
