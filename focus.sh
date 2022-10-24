@@ -144,6 +144,28 @@ checKFilesExist() {
 	}
 
 
+getPhoneStatus() {
+# When running "adb devices", I can get :
+# - phone is not connected :
+# 	List of devices attached
+# 	(empty line)
+# - phone is plugged but has not yet allowed this PC to debug it
+# 	List of devices attached
+# 	<device_ID>			unauthorized
+# 	(empty line)
+# - phone is connected and ready for ADB commands
+# 	List of devices attached
+# 	<device_ID>			device
+# 	(empty line)
+	adb devices | awk ' \
+		BEGIN			{ phoneStatus="absent";			} \
+		/unauthorized$/	{ phoneStatus="unauthorized";	} \
+		/device$/		{ phoneStatus="ready";			} \
+		END				{ print phoneStatus;			} \
+		'
+	}
+
+
 main() {
 	case "$1" in
 		'-c')
@@ -153,6 +175,9 @@ main() {
 			fileErrors=$(checKFilesExist)
 			echo -n " - files : "
 			[ -z "$fileErrors" ] && echo 'OK' || echo -e "\n$fileErrors"
+
+			# report phone status
+			echo " - phone status : '$(getPhoneStatus)'"
 			;;
 		*)	# anything else, normal mode
 #			echo "'normal' mode"
