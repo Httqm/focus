@@ -15,6 +15,7 @@ soundStop=/usr/share/sounds/sound-icons/finish
 soundStopEmergency=/usr/share/sounds/sound-icons/prompt
 soundPhoneUnauthorized=/usr/share/sounds/sound-icons/cembalo-2.wav
 
+
 # see /usr/share/icons/Humanity/status/22
 notificationIconAvailable='user-available'	# icon name without path nor extension
 notificationIconBusy='user-busy'			# icon name without path nor extension
@@ -187,6 +188,7 @@ dontStartWithUnauthorizedPhone() {
 
 main() {
 	case "$1" in
+
 		'-c')
 			echo "'check' mode :"
 
@@ -198,12 +200,11 @@ main() {
 			# report phone status
 			echo " - phone status : '$(getPhoneStatus)'"
 			;;
+
 		*)	# anything else, normal mode
-#			echo "'normal' mode"
 			dontStartWithUnauthorizedPhone
 			enterFocusMode
 			sleep "$focusDurationMinutes"m
-#			sleep 10
 			leaveFocusMode
 			;;
 	esac
