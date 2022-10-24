@@ -13,6 +13,7 @@ listOfApplicationsToSilence='teams evolution'
 soundStart=/usr/share/sounds/sound-icons/trumpet-12.wav
 soundStop=/usr/share/sounds/sound-icons/finish
 soundStopEmergency=/usr/share/sounds/sound-icons/prompt
+soundPhoneUnauthorized=/usr/share/sounds/sound-icons/cembalo-2.wav
 
 # see /usr/share/icons/Humanity/status/22
 notificationIconAvailable='user-available'	# icon name without path nor extension
@@ -133,7 +134,7 @@ leaveFocusMode() {
 
 
 checKFilesExist() {
-	for requiredFile in "$soundStart" "$soundStop" "$soundStopEmergency"; do
+	for requiredFile in "$soundStart" "$soundStop" "$soundStopEmergency" "$soundPhoneUnauthorized"; do
 		[ -e "$requiredFile" ] || echo "Missing sound file '$requiredFile'"
 	done
 
@@ -166,6 +167,22 @@ getPhoneStatus() {
 	}
 
 
+dontStartWithUnauthorizedPhone() {
+	# The phone may have 3 states :
+	#	- 'ready' : this is fine
+	#	- 'absent' : this is fine too
+	#	- 'unauthorized' : just missing a few clicks to be handled by this script.
+	#		This is an in-between state, and I know how I'll react : stop the script
+	#		+ enable USB debugging on the phone + restart the script.
+	#		So better blocking from the start anyway ;-)
+	[ $(getPhoneStatus) == 'unauthorized' ] && {
+		playSound "$soundPhoneUnauthorized"
+		echo 'phone is unauthorized'
+		exit 1
+		}
+	}
+
+
 main() {
 	case "$1" in
 		'-c')
@@ -181,6 +198,7 @@ main() {
 			;;
 		*)	# anything else, normal mode
 #			echo "'normal' mode"
+			dontStartWithUnauthorizedPhone
 			enterFocusMode
 			sleep "$focusDurationMinutes"m
 #			sleep 10
