@@ -147,11 +147,12 @@ checKFilesExist() {
 main() {
 	case "$1" in
 		'-c')
-			# check mode
-			# This mode is used to make sure none of the expected files
-			# (sounds, icons, ...) is missing.
-			echo "'check' mode (no error below means 'OK')"
-			checKFilesExist
+			echo "'check' mode :"
+
+			# make sure none of the expected files (sounds, icons, ...) is missing
+			fileErrors=$(checKFilesExist)
+			echo -n " - files : "
+			[ -z "$fileErrors" ] && echo 'OK' || echo -e "\n$fileErrors"
 			;;
 		*)	# anything else, normal mode
 #			echo "'normal' mode"
