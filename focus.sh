@@ -97,21 +97,23 @@ silenceApplications() {
 
 toggleAirplaneMode() {
 	local airplaneMode=$1
-	case $airplaneMode in
-		on)
-			valueAirplaneMode=1
-			valueSvc='disable'
-			;;
-		off)
-			valueAirplaneMode=0
-			valueSvc='enable'
-			;;
-	esac
-	adb shell input keyevent KEYCODE_WAKEUP	# turn screen on ...
-	adb shell cmd statusbar expand-settings	# ... so that you can check icons ;-)
-	adb shell settings put global airplane_mode_on "$valueAirplaneMode"
-	adb shell svc data "$valueSvc"
-	adb shell svc wifi "$valueSvc"
+	[ $(getPhoneStatus) == 'ready' ] && {
+		case $airplaneMode in
+			on)
+				valueAirplaneMode=1
+				valueSvc='disable'
+				;;
+			off)
+				valueAirplaneMode=0
+				valueSvc='enable'
+				;;
+		esac
+		adb shell input keyevent KEYCODE_WAKEUP	# turn screen on ...
+		adb shell cmd statusbar expand-settings	# ... so that you can check icons ;-)
+		adb shell settings put global airplane_mode_on "$valueAirplaneMode"
+		adb shell svc data "$valueSvc"
+		adb shell svc wifi "$valueSvc"
+		}
 	}
 
 
