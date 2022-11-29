@@ -99,28 +99,16 @@ silenceApplications() {
 toggleAirplaneMode() {
 	local airplaneMode=$1
 	[ $(getPhoneStatus) == 'ready' ] && {
-		case $airplaneMode in
-			on)
-				valueAirplaneMode=1
-				valueSvc='disable'
-				;;
-			off)
-				valueAirplaneMode=0
-				valueSvc='enable'
-				;;
-		esac
 		adb shell input keyevent KEYCODE_WAKEUP	# turn screen on ...
 		adb shell cmd statusbar expand-settings	# ... so that you can check icons ;-)
-		adb shell settings put global airplane_mode_on "$valueAirplaneMode"
-		adb shell svc data "$valueSvc"
-		adb shell svc wifi "$valueSvc"
+		adb shell cmd connectivity airplane-mode "$airplaneMode"
 		}
 	}
 
 
 enterFocusMode() {
-	toggleAirplaneMode on
 	silenceApplications rest
+	toggleAirplaneMode enable
 	displayNotification enterDnDMode	# must be done out of DnD mode ;-)
 	playSound "$soundStart"
 	turnXfceDoNotDisturbMode on
@@ -128,7 +116,7 @@ enterFocusMode() {
 
 
 leaveFocusMode() {
-	toggleAirplaneMode off
+	toggleAirplaneMode disable
 	turnXfceDoNotDisturbMode off
 	silenceApplications wakeUp
 	displayNotification leaveDnDMode	# must be done out of DnD mode ;-)
