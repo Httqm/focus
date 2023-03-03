@@ -28,7 +28,7 @@ debug() {
 
 
 getFirefoxAboutProcessesPage() {
-	~/Dev/GitHub/automate-save-page-as/savePageAs.sh \
+	../automate-save-page-as/savePageAs.sh \
 		--browser firefox \
 		'about:processes' \
 		--destination "$tempDir/$htmlDocumentName" \
