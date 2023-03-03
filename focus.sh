@@ -9,6 +9,7 @@
 
 focusDurationMinutes=25
 listOfApplicationsToSilence='teams'
+listOfPidsToSilence=''	# will be populated later
 
 soundStart=/usr/share/sounds/sound-icons/trumpet-12.wav
 soundStop=/usr/share/sounds/sound-icons/finish
@@ -174,6 +175,17 @@ dontStartWithUnauthorizedPhone() {
 	}
 
 
+makeListOfPidsToSilence() {
+	# apps listed by name
+	for application in $listOfApplicationsToSilence; do
+		listOfPidsToSilence="$listOfPidsToSilence $(pidof "$application")"
+	done
+
+	# my mailbox as a Firefox tab
+	listOfPidsToSilence="$listOfPidsToSilence $(cat getMailboxPid.pid)"
+	}
+
+
 main() {
 	case "$1" in
 
@@ -191,6 +203,7 @@ main() {
 
 		*)	# anything else, normal mode
 			dontStartWithUnauthorizedPhone
+			makeListOfPidsToSilence
 			enterFocusMode
 			sleep "$focusDurationMinutes"m
 			leaveFocusMode
