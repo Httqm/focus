@@ -1,17 +1,24 @@
 #!/usr/bin/env bash
 
 codeNoPidFound='0'
-resultFile="$(basename "$0" .sh).pid"
-[ -f "$resultFile" ] && rm "$resultFile"
+pidFile='/tmp/getWebmailTab.pid'
 
 tempDir="$(mktemp --tmpdir='/tmp' -d )"
 htmlDocumentName='firefoxProcesses.html'
 
 
+writeToPidFile() {
+	# to circumvent symlink exploits
+	local value=$1
+	[ -e "$pidFile" ] && rm "$pidFile"
+	echo "$value" > "$pidFile"
+	}
+
+
 exitIfFirefoxIsNotRunning() {
 	[ $(ps -ef | grep -c [f]irefox) -eq 0 ] && {
 		debug 'firefox is not running'
-		echo "$codeNoPidFound" > "$resultFile"
+		writeToPidFile "$codeNoPidFound"
 		exit 1
 		} || true
 	}
@@ -38,7 +45,7 @@ getFirefoxAboutProcessesPage() {
 
 
 getPid() {
-	sed -rn 's|^.*https://office\.com \(([0-9]+)\).*$|\1|p' "$tempDir/$htmlDocumentName" > "$resultFile"
+	writeToPidFile $(sed -rn 's|^.*https://office\.com \(([0-9]+)\).*$|\1|p' "$tempDir/$htmlDocumentName")
 	}
 
 
