@@ -171,8 +171,16 @@ makeListOfPidsToSilence() {
 		listOfPidsToSilence="$listOfPidsToSilence $(pidof "$application")"
 	done
 
-	# my mailbox as a Firefox tab
-	listOfPidsToSilence="$listOfPidsToSilence $(cat "$pidFile")"
+	# my webmail Firefox tab
+	webmailTabPid=$(cat "$pidFile")
+
+	# check we do have a PID value
+	[ "$webmailTabPid" -ne "$codeNoPidFound" ] && {
+		# ensure this is the PID of a Firefox process
+		[ $(pgrep -f firefox | grep -c "$webmailTabPid") == 1 ] && {
+			listOfPidsToSilence="$listOfPidsToSilence $webmailTabPid"
+			}
+		}
 	}
 
 

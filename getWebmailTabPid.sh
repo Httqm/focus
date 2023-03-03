@@ -2,7 +2,6 @@
 
 . config.sh
 
-codeNoPidFound='0'
 tempDir="$(mktemp --tmpdir='/tmp' -d )"
 htmlDocumentName='firefoxProcesses.html'
 
