@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+. config.sh
+
 focusDurationMinutes=25
 listOfApplicationsToSilence='teams'
 listOfPidsToSilence=''	# will be populated later
@@ -170,7 +172,7 @@ makeListOfPidsToSilence() {
 	done
 
 	# my mailbox as a Firefox tab
-	listOfPidsToSilence="$listOfPidsToSilence $(cat getMailboxPid.pid)"
+	listOfPidsToSilence="$listOfPidsToSilence $(cat "$pidFile")"
 	}
 
 

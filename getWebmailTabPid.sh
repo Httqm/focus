@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-codeNoPidFound='0'
-pidFile='/tmp/getWebmailTab.pid'
+. config.sh
 
+codeNoPidFound='0'
 tempDir="$(mktemp --tmpdir='/tmp' -d )"
 htmlDocumentName='firefoxProcesses.html'
 
