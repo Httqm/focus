@@ -76,7 +76,7 @@ displayNotification() {
 	}
 
 
-silenceApplications() {
+silencePids() {
 	local applicationTargetMode=$1
 	case $applicationTargetMode in
 		rest)
@@ -86,13 +86,8 @@ silenceApplications() {
 			signal=cont
 			;;
 	esac
-	for application in $listOfApplicationsToSilence; do
-		for applicationPid in $(pidof "$application"); do
-			[ -z "$applicationPid" ] && : || {
-				kill -s $signal $applicationPid
-#				echo "application '$application' has PID : '$applicationPid'"
-				}
-		done
+	for pidToSilence in $listOfPidsToSilence; do
+		kill -s $signal $pidToSilence
 	done
 	}
 
@@ -108,7 +103,7 @@ toggleAirplaneMode() {
 
 
 enterFocusMode() {
-	silenceApplications rest
+	silencePids rest
 	toggleAirplaneMode enable
 	displayNotification enterDnDMode	# must be done out of DnD mode ;-)
 	playSound "$soundStart"
@@ -119,7 +114,7 @@ enterFocusMode() {
 leaveFocusMode() {
 	toggleAirplaneMode disable
 	turnXfceDoNotDisturbMode off
-	silenceApplications wakeUp
+	silencePids wakeUp
 	displayNotification leaveDnDMode	# must be done out of DnD mode ;-)
 	playSound "$soundStop"
 	}
