@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# Help me focus by 'deconnecting' from :
-# - emails
-# - corporate messaging / chat
-# - my smarphone (which must be connected via USB to the computer)
-#
-# ... and connecting back to these after a configured duration
-
 focusDurationMinutes=25
 listOfApplicationsToSilence='teams'
 listOfPidsToSilence=''	# will be populated later
