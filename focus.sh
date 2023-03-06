@@ -172,12 +172,15 @@ makeListOfPidsToSilence() {
 	done
 
 	# my webmail Firefox tab
-	webmailTabPid=$(cat "$pidFile")
-
+	[ -e "$pidFile" ] && {
+		webmailTabPid=$(cat "$pidFile")
 		# check we do have a PID value, AND this PID is a Firefox process
 		[ "$webmailTabPid" -ne "$codeNoPidFound" \
 			-a $(pgrep -f firefox | grep -c "$webmailTabPid") == 1 ] \
 			&& listOfPidsToSilence="$listOfPidsToSilence $webmailTabPid"
+		} || {
+		echo 'PID file not found, run "getWebmailTabPid.sh"'
+		exit 1
 		}
 	}
 
