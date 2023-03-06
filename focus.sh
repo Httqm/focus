@@ -67,7 +67,7 @@ displayNotification() {
 	# notifications can either be sent to :
 	#	- the primary monitor
 	#	- the monitor having the mouse cursor
-	# configure this with xfce4-notifyd-config
+	# configure this with 'xfce4-notifyd-config'
 	}
 
 
@@ -91,7 +91,7 @@ toggleAirplaneMode() {
 	local airplaneMode=$1
 	[ $(getPhoneStatus) == 'ready' ] && {
 		adb shell input keyevent KEYCODE_WAKEUP	# turn screen on ...
-		adb shell cmd statusbar expand-settings	# ... so that you can check icons ;-)
+		adb shell cmd statusbar expand-settings	# ... so that you can see icons switching
 		adb shell cmd connectivity airplane-mode "$airplaneMode"
 		}
 	}
@@ -100,7 +100,7 @@ toggleAirplaneMode() {
 enterFocusMode() {
 	silencePids rest
 	toggleAirplaneMode enable
-	displayNotification enterDnDMode	# must be done out of DnD mode ;-)
+	displayNotification enterDnDMode	# must be done out of 'Do Not Disturb' mode ;-)
 	playSound "$soundStart"
 	turnXfceDoNotDisturbMode on
 	}
@@ -110,7 +110,7 @@ leaveFocusMode() {
 	toggleAirplaneMode disable
 	turnXfceDoNotDisturbMode off
 	silencePids wakeUp
-	displayNotification leaveDnDMode	# must be done out of DnD mode ;-)
+	displayNotification leaveDnDMode	# must be done out of 'Do Not Disturb' mode ;-)
 	playSound "$soundStop"
 	}
 
@@ -128,18 +128,18 @@ checKFilesExist() {
 
 
 getPhoneStatus() {
-# When running "adb devices", I can get :
-# - phone is not connected :
-# 	List of devices attached
-# 	(empty line)
-# - phone is plugged but has not yet allowed this PC to debug it
-# 	List of devices attached
-# 	<device_ID>			unauthorized
-# 	(empty line)
-# - phone is connected and ready for ADB commands
-# 	List of devices attached
-# 	<device_ID>			device
-# 	(empty line)
+	# When running "adb devices", I can get :
+	# - phone is not connected :
+	# 	List of devices attached
+	# 	(empty line)
+	# - phone is plugged but has not yet allowed this PC to debug it
+	# 	List of devices attached
+	# 	<device_ID>			unauthorized
+	# 	(empty line)
+	# - phone is connected and ready for ADB commands
+	# 	List of devices attached
+	# 	<device_ID>			device
+	# 	(empty line)
 	adb devices | awk ' \
 		BEGIN			{ phoneStatus="absent";			} \
 		/unauthorized$/	{ phoneStatus="unauthorized";	} \
@@ -151,8 +151,8 @@ getPhoneStatus() {
 
 dontStartWithUnauthorizedPhone() {
 	# The phone may have 3 states :
-	#	- 'ready' : this is fine
-	#	- 'absent' : this is fine too
+	#	- 'ready'        : this is fine
+	#	- 'absent'       : this is fine too
 	#	- 'unauthorized' : just missing a few clicks to be handled by this script.
 	#		This is an in-between state, and I know how I'll react : stop the script
 	#		+ enable USB debugging on the phone + restart the script.
