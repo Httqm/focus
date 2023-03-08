@@ -175,13 +175,23 @@ makeListOfPidsToSilence() {
 	if [ -e "$pidFile" ]; then
 		webmailTabPid=$(cat "$pidFile")
 
-		# check we do have a PID value, AND this PID is a Firefox process
-		if [ "$webmailTabPid" -ne "$codeNoPidFound" -a $(pgrep -f firefox | grep -c "$webmailTabPid") == 1 ]; then
-			listOfPidsToSilence="$listOfPidsToSilence $webmailTabPid"
-		else
-			echo 'invalid PID, run "getWebmailTabPid.sh"'
-			exit 1
-		fi
+		case "$webmailTabPid" in
+			'')
+				echo "No PID found for webmail browser tab (empty string), won't silence it"
+				;;
+			"$codeNoPidFound")
+				echo "No PID found for webmail browser tab (=$codeNoPidFound), won't silence it"
+				;;
+			*)
+				# check we do have a PID value, AND this PID is a Firefox process
+				if [ $(pgrep -f firefox | grep -c "$webmailTabPid") == 1 ]; then
+					listOfPidsToSilence="$listOfPidsToSilence $webmailTabPid"
+				else
+					echo 'invalid PID, run "getWebmailTabPid.sh"'
+					exit 1
+				fi
+				;;
+		esac
 	else
 		echo 'PID file not found, run "getWebmailTabPid.sh"'
 		exit 1
