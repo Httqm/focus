@@ -2,23 +2,7 @@
 
 . config.sh
 
-focusDurationMinutes=25
-listOfApplicationsToSilence='teams'
-listOfPidsToSilence=''	# will be populated later
-
-soundStart=/usr/share/sounds/sound-icons/trumpet-12.wav
-soundStop=/usr/share/sounds/sound-icons/finish
-soundStopEmergency=/usr/share/sounds/sound-icons/prompt
-soundPhoneUnauthorized=/usr/share/sounds/sound-icons/cembalo-2.wav
-
-
-# see /usr/share/icons/Humanity/status/22
-notificationIconAvailable='user-available'	# icon name without path nor extension
-notificationIconBusy='user-busy'			# icon name without path nor extension
-
-
 trap emergencyExit SIGINT	# on CTRL-c
-
 
 emergencyExit() {
 	echo -e '\n\t/!\ Emergency exit\n'
