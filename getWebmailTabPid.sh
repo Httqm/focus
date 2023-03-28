@@ -8,9 +8,9 @@ htmlDocumentName='firefoxProcesses.html'
 
 writeToPidFile() {
 	# to circumvent symlink exploits
-	local value=$1
-	[ -e "$pidFile" ] && rm "$pidFile"
-	echo "$value" > "$pidFile"
+	local pidValue=$1
+	[ -e "$webmailTabPidFile" ] && rm "$webmailTabPidFile"
+	echo "$pidValue" > "$webmailTabPidFile"
 	}
 
 

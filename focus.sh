@@ -172,8 +172,8 @@ makeListOfPidsToSilence() {
 	done
 
 	# my webmail Firefox tab
-	if [ -e "$pidFile" ]; then
-		webmailTabPid=$(cat "$pidFile")
+	if [ -e "$webmailTabPidFile" ]; then
+		webmailTabPid=$(cat "$webmailTabPidFile")
 
 		case "$webmailTabPid" in
 			'')
