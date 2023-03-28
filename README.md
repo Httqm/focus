@@ -40,8 +40,8 @@ This has been developped + tested in the following environment :
 
 
 ## Requirements
-* ADB
-* automate-save-page-as (see my other repositories)
+* [adb](https://packages.debian.org/stable/adb)
+* [automate-save-page-as](https://github.com/Httqm/automate-save-page-as)
 * ... (?)
 
 
