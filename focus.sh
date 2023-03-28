@@ -185,7 +185,6 @@ makeListOfPidsToSilence() {
 
 main() {
 	case "$1" in
-
 		'-c')
 			echo "'check' mode :"
 
@@ -198,6 +197,14 @@ main() {
 			echo " - phone status : '$(getPhoneStatus)'"
 			;;
 
+		'-s')
+			echo "'sound test' mode :"
+			for sound in "$soundStart" "$soundStop" "$soundStopEmergency" "$soundPhoneUnauthorized"; do
+				echo " - '$sound'"
+				playSound "$sound"
+			done
+			;;
+
 		*)	# anything else, normal mode
 			dontStartWithUnauthorizedPhone
 			makeListOfPidsToSilence
@@ -207,5 +214,6 @@ main() {
 			;;
 	esac
 	}
+
 
 main "$@"
