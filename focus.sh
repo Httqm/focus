@@ -156,6 +156,17 @@ makeListOfPidsToSilence() {
 	done
 
 	# my webmail Firefox tab
+# TODO (after switchig to the web version of MS-Teams) :
+# - instead of running 1 script that returns 1 PID
+# - run 1 script (getWebMailTabPid.sh, rename it accordingly)
+# - pass it a list of "needles"
+# - let it search
+# - then return an array of values :
+# - 	app1, pidApp1
+# - 	app2, pidApp2
+# - 	...
+# - and use these here
+
 	if [ -e "$webmailTabPidFile" ]; then
 		webmailTabPid=$(cat "$webmailTabPidFile")
 
