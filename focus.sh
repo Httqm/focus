@@ -184,12 +184,14 @@ makeListOfPidsToSilence() {
 				else
 					echo 'invalid PID, run "getWebmailTabPid.sh"'
 					exit 1
+					# TODO: launch script instead of returning error ?
 				fi
 				;;
 		esac
 	else
 		echo 'PID file not found, run "getWebmailTabPid.sh"'
 		exit 1
+		# TODO: launch script instead of returning error ?
 	fi
 	}
 
