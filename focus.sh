@@ -158,7 +158,7 @@ makeListOfPidsToSilence() {
 	# my webmail Firefox tab
 # TODO (after switchig to the web version of MS-Teams) :
 # - instead of running 1 script that returns 1 PID
-# - run 1 script (getWebMailTabPid.sh, rename it accordingly)
+# - run 1 script (getFirefoxTabPid.sh, rename it accordingly)
 # - pass it a list of "needles"
 # - let it search
 # - then return an array of values :
@@ -182,14 +182,14 @@ makeListOfPidsToSilence() {
 				if [ $(pgrep -f firefox | grep -c "$webmailTabPid") == 1 ]; then
 					listOfPidsToSilence="$listOfPidsToSilence $webmailTabPid"
 				else
-					echo 'invalid PID, run "getWebmailTabPid.sh"'
+					echo 'invalid PID, run "getFirefoxTabPid.sh"'
 					exit 1
 					# TODO: launch script instead of returning error ?
 				fi
 				;;
 		esac
 	else
-		echo 'PID file not found, run "getWebmailTabPid.sh"'
+		echo 'PID file not found, run "getFirefoxTabPid.sh"'
 		exit 1
 		# TODO: launch script instead of returning error ?
 	fi
