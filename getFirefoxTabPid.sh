@@ -99,9 +99,17 @@ echoMessage() {
 
 
 loadCliParameters() {
-	[ -n "$1" ] && appName="$1"			|| { echo 'missing appName';		exit 1; }
-	[ -n "$2" ] && pidResultFile="$2"	|| { echo 'missing pidResultFile';	exit 1; }
-	# TODO: add 'usage' function
+	[ "$#" -lt 0 ] && { usage; exit 0; }
+
+	while getopts ':a:f:h' opt; do
+		case "$opt" in
+			a)	appName="$OPTARG" ;;
+			f)	pidResultFile="$OPTARG" ;;
+			h)	usage; exit 0 ;;
+			\?)	echoMessage "⛔ Invalid option: '-$OPTARG'"; usage; exit 1 ;;
+			:)	echoMessage "⚠️  Option '-$OPTARG' requires an argument"; usage; exit 1 ;;
+		esac
+	done
 	}
 
 
