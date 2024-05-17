@@ -72,6 +72,32 @@ getFirefoxTabPid() {
 	}
 
 
+usage() {
+	cat <<-EOUSAGE
+	$(basename $0) : Get the PID of a specific Firefox tab (such as the one running your
+	                      webmail or a chat application), so that you may "do things" to it
+	                      (pause, kill, ...).
+	                      Once retreived, the PID number is written into a result file
+	                      so that it can be used (and re-used) by external scripts.
+
+	USAGE :
+	    $0 -a <appName> -f <pidResultFile>
+
+	options:
+	  -a <appName>       : xxx      xxx
+	  -f <pidResultFile> : xxx      xxx
+	  -h                 : help     Display this help and exit
+
+	EOUSAGE
+	}
+
+
+echoMessage() {
+	local message=$1
+	echo -e "\n$message\n"
+	}
+
+
 loadCliParameters() {
 	[ -n "$1" ] && appName="$1"			|| { echo 'missing appName';		exit 1; }
 	[ -n "$2" ] && pidResultFile="$2"	|| { echo 'missing pidResultFile';	exit 1; }
