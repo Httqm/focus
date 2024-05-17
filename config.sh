@@ -21,3 +21,4 @@ notificationIconBusy='user-busy'			# icon name without path nor extension
 listOfPidsToSilence=''	# will be populated later
 codeNoPidFound='0'
 webmailTabPidFile='/tmp/getWebmailTab.pid'	# within '/tmp' so that we won't re-use an old value
+											# will be deleted if found to workaround symlink exploits

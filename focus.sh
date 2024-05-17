@@ -182,14 +182,14 @@ makeListOfPidsToSilence() {
 				if [ $(pgrep -f firefox | grep -c "$webmailTabPid") == 1 ]; then
 					listOfPidsToSilence="$listOfPidsToSilence $webmailTabPid"
 				else
-					echo 'invalid PID, run "getFirefoxTabPid.sh"'
+					echo -e "invalid PID, run :\n\t./getFirefoxTabPid.sh outlook $webmailTabPidFile"
 					exit 1
 					# TODO: launch script instead of returning error ?
 				fi
 				;;
 		esac
 	else
-		echo 'PID file not found, run "getFirefoxTabPid.sh"'
+		echo -e "PID file not found, run :\n\t./getFirefoxTabPid.sh outlook $webmailTabPidFile"
 		exit 1
 		# TODO: launch script instead of returning error ?
 	fi
