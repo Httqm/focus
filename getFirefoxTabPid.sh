@@ -98,11 +98,26 @@ echoMessage() {
 
 
 loadCliParameters() {
-	[ "$#" -lt 0 ] && { usage; exit 0; }
+	[ "$#" -lt 0 ] && { usage; exit 1; }
+	# this script must be invoked like :
+	#	scriptName -a <appName> -f <fileName>
+	# but this test does not detect invocations like
+	#	scriptName <appName> <fileName>
 
-	while getopts ':a:f:h' opt; do
+	options=':a:f:h'
+
+	# detect when script was called without specifiying the expected option(s)
+	if (! getopts "$options" opt); then
+		echoMessage "⛔ Missing option(s)"
+		usage
+		exit 1
+	fi
+
+	while getopts "$options" opt; do
 		case "$opt" in
-			a)	appName="$OPTARG" ;;
+			a)
+				appName="$OPTARG"
+				;;
 			f)	pidResultFile="$OPTARG" ;;
 			h)	usage; exit 0 ;;
 			\?)	echoMessage "⛔ Invalid option: '-$OPTARG'"; usage; exit 1 ;;
