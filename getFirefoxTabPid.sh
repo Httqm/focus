@@ -15,11 +15,10 @@ pidResultFile=''	# will be populated later
 
 usage() {
 	cat <<-EOUSAGE
-	$(basename $0) : Get the PID of a specific Firefox tab (such as the one running your
-	                      webmail or a chat application), so that you may "do things" to it
-	                      (pause, kill, ...).
-	                      Once retreived, the PID number is written into a result file
-	                      so that it can be used (and re-used) by external scripts.
+	$(basename $0) : Get the PID of a specific Firefox tab (such as the one running your webmail
+	                 or a chat application), so that you may "do things" to it (pause, kill, ...).
+	                 Once retreived, the PID number is written into a result file so that it can
+	                 be used by external scripts.
 
 	USAGE :
 	    $0 -a <appName> -f <pidResultFile>
@@ -107,7 +106,7 @@ loadCliParameters() {
 			f)	pidResultFile="$OPTARG" ;;
 			h)	usage; exit 0 ;;
 			\?)	echoMessage "⛔ Invalid option: '-$OPTARG'"; usage; exit 1 ;;
-			:)	echoMessage "⚠️  Option '-$OPTARG' requires an argument"; usage; exit 1 ;;
+			:)	echoMessage "⚠️  No value given for option '-$OPTARG'"; usage; exit 1 ;;
 		esac
 	done
 	}
