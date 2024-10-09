@@ -13,6 +13,26 @@ appName=''			# will be populated later
 pidResultFile=''	# will be populated later
 
 
+usage() {
+	cat <<-EOUSAGE
+	$(basename $0) : Get the PID of a specific Firefox tab (such as the one running your
+	                      webmail or a chat application), so that you may "do things" to it
+	                      (pause, kill, ...).
+	                      Once retreived, the PID number is written into a result file
+	                      so that it can be used (and re-used) by external scripts.
+
+	USAGE :
+	    $0 -a <appName> -f <pidResultFile>
+
+	options:
+	  -a <appName>       : xxx      xxx
+	  -f <pidResultFile> : xxx      xxx
+	  -h                 : help     Display this help and exit
+
+	EOUSAGE
+	}
+
+
 loadAppSettings() {
 	local appName=$1
 	case $appName in
@@ -69,26 +89,6 @@ getFirefoxAboutProcessesPage() {
 getFirefoxTabPid() {
 	firefoxTabPid=$(sed -rn 's|^.*'$urlRegex' \(([0-9]+)\).*$|\1|p' "$tempDir/$saveAsFilename")
 	writePidToFile "$firefoxTabPid" "$pidResultFile"
-	}
-
-
-usage() {
-	cat <<-EOUSAGE
-	$(basename $0) : Get the PID of a specific Firefox tab (such as the one running your
-	                      webmail or a chat application), so that you may "do things" to it
-	                      (pause, kill, ...).
-	                      Once retreived, the PID number is written into a result file
-	                      so that it can be used (and re-used) by external scripts.
-
-	USAGE :
-	    $0 -a <appName> -f <pidResultFile>
-
-	options:
-	  -a <appName>       : xxx      xxx
-	  -f <pidResultFile> : xxx      xxx
-	  -h                 : help     Display this help and exit
-
-	EOUSAGE
 	}
 
 
