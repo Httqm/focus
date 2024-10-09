@@ -189,7 +189,7 @@ makeListOfPidsToSilence() {
 				;;
 		esac
 	else
-		echo -e "PID file not found, run :\n\t./getFirefoxTabPid.sh outlook $webmailTabPidFile"
+		echo -e "PID file not found, run :\n\t./getFirefoxTabPid.sh -a outlook -f $webmailTabPidFile"
 		exit 1
 		# TODO: launch script instead of returning error ?
 	fi
