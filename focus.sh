@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-. config.sh
-
-trap emergencyExit SIGINT	# on CTRL-c
-
+mode='default'
 
 usage() {
 	cat <<-EOUSAGE
@@ -222,48 +219,69 @@ makeListOfPidsToSilence() {
 	}
 
 
+getCliParameters() {
+	# NB: it is OK to invoke this script without arguments
+	while getopts ':chs' opt; do
+		case "$opt" in
+			c)	mode='check'	;;
+
+			h)	usage; exit 0	;;
+
+			s)	mode='soundTest'	;;
+
+			\?)	echo "Invalid option: '-$OPTARG'"; usage; exit 1 ;;
+		esac
+	done
+	}
+
+
+mode_check() {
+	echo "'check' mode :"
+	# make sure none of the expected files (sounds, icons, ...) is missing
+	fileErrors=$(checKFilesExist)
+	echo -n " - files : "
+	[ -z "$fileErrors" ] && echo 'OK' || echo -e "\n$fileErrors"
+
+	# report phone status
+	echo " - phone status : '$(getPhoneStatus)'"
+	}
+
+
+mode_soundTest() {
+	echo "'sound test' mode :"
+	while read soundData; do
+		soundEventName=$(echo "$soundData" | cut -d'|' -f1)
+		soundFileName=$( echo "$soundData" | cut -d'|' -f2)
+		echo -e " - $soundEventName:\t'$soundFileName'"
+		playSound "$soundFileName"
+	done < <(cat <<-EOF
+		Focus time start|$soundStart
+		Focus time end|$soundStop
+		Emergency exit|$soundStopEmergency
+		Phone not authorized|$soundPhoneUnauthorized
+		EOF
+		)
+	}
+
+
+mode_default() {
+	dontStartWithUnauthorizedPhone
+	makeListOfPidsToSilence
+	enterFocusMode
+	sleep "$focusDurationMinutes"m
+	leaveFocusMode
+	}
+
+
 main() {
-	case "$1" in
-		'-c')
-			echo "'check' mode :"
+	. config.sh
+	trap emergencyExit SIGINT	# on CTRL-c
 
-			# make sure none of the expected files (sounds, icons, ...) is missing
-			fileErrors=$(checKFilesExist)
-			echo -n " - files : "
-			[ -z "$fileErrors" ] && echo 'OK' || echo -e "\n$fileErrors"
-
-			# report phone status
-			echo " - phone status : '$(getPhoneStatus)'"
-			;;
-
-		'-h')
-			usage
-			exit 0
-			;;
-
-		'-s')
-			echo "'sound test' mode :"
-			while read soundData; do
-				soundEventName=$(echo "$soundData" | cut -d'|' -f1)
-				soundFileName=$( echo "$soundData" | cut -d'|' -f2)
-				echo -e " - $soundEventName:\t'$soundFileName'"
-				playSound "$soundFileName"
-			done < <(cat <<-EOF
-				Focus time start|$soundStart
-				Focus time end|$soundStop
-				Emergency exit|$soundStopEmergency
-				Phone not authorized|$soundPhoneUnauthorized
-				EOF
-				)
-			;;
-
-		*)	# anything else, normal mode
-			dontStartWithUnauthorizedPhone
-			makeListOfPidsToSilence
-			enterFocusMode
-			sleep "$focusDurationMinutes"m
-			leaveFocusMode
-			;;
+	getCliParameters "$@"
+	case "$mode" in
+		check)		mode_check		;;
+		soundTest)	mode_soundTest	;;
+		default)	mode_default	;;
 	esac
 	}
 
