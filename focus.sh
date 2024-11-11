@@ -4,6 +4,34 @@
 
 trap emergencyExit SIGINT	# on CTRL-c
 
+
+usage() {
+	cat <<-EOUSAGE
+
+	$(basename $0) : stay in "the zone" and be more productive by cutting sources of distraction, i.e. notifications :
+	  - from your cell phone
+	  - from instant messaging apps
+	  - "new mail" bell
+	  - ...
+
+
+	USAGE :
+	    $0
+
+	    All settings (like "focus" time duration) are in './config.sh'
+
+
+	options:
+	  -c : check mode	Make sure
+	                          - none of the expected files (sounds, icons, ...) is missing
+	                          - the script can communicate with the phone
+	  -h : help		Display this message and exit
+	  -s : sound test	Play the notification sounds
+
+	EOUSAGE
+	}
+
+
 emergencyExit() {
 	echo -e '\n\t/!\ Emergency exit\n'
 	playSound "$soundStopEmergency"
@@ -193,33 +221,6 @@ makeListOfPidsToSilence() {
 		exit 1
 		# TODO: launch script instead of returning error ?
 	fi
-	}
-
-
-usage() {
-	cat <<-EOUSAGE
-
-	$(basename $0) : stay in "the zone" and be more productive by cutting sources of distraction, i.e. notifications :
-	  - from your cell phone
-	  - from instant messaging apps
-	  - "new mail" bell
-	  - ...
-
-
-	USAGE :
-	    $0
-
-	    All settings (like "focus" time duration) are in './config.sh'
-
-
-	options:
-	  -c : check mode	Make sure
-	                          - none of the expected files (sounds, icons, ...) is missing
-	                          - the script can communicate with the phone
-	  -h : help		Display this message and exit
-	  -s : sound test	Play the notification sounds
-
-	EOUSAGE
 	}
 
 
