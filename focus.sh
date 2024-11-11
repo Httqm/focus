@@ -122,7 +122,7 @@ leaveFocusMode() {
 	}
 
 
-checKFilesExist() {
+checkFilesExist() {
 	for requiredFile in "$soundStart" "$soundStop" "$soundStopEmergency" "$soundPhoneUnauthorized"; do
 		[ -e "$requiredFile" ] || echo "Missing sound file '$requiredFile'"
 	done
@@ -238,7 +238,7 @@ getCliParameters() {
 mode_check() {
 	echo "'check' mode :"
 	# make sure none of the expected files (sounds, icons, ...) is missing
-	fileErrors=$(checKFilesExist)
+	fileErrors=$(checkFilesExist)
 	echo -n " - files : "
 	[ -z "$fileErrors" ] && echo 'OK' || echo -e "\n$fileErrors"
 
