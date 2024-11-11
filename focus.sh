@@ -243,10 +243,18 @@ main() {
 
 		'-s')
 			echo "'sound test' mode :"
-			for sound in "$soundStart" "$soundStop" "$soundStopEmergency" "$soundPhoneUnauthorized"; do
-				echo " - '$sound'"
-				playSound "$sound"
-			done
+			while read soundData; do
+				soundEventName=$(echo "$soundData" | cut -d'|' -f1)
+				soundFileName=$( echo "$soundData" | cut -d'|' -f2)
+				echo -e " - $soundEventName:\t'$soundFileName'"
+				playSound "$soundFileName"
+			done < <(cat <<-EOF
+				Focus time start|$soundStart
+				Focus time end|$soundStop
+				Emergency exit|$soundStopEmergency
+				Phone not authorized|$soundPhoneUnauthorized
+				EOF
+				)
 			;;
 
 		*)	# anything else, normal mode
