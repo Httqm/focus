@@ -14,19 +14,17 @@ usage() {
 	  - "new mail" bell
 	  - ...
 
-
 	USAGE :
-	    $0
+	    $0 [option]
 
 	    All settings (like "focus" time duration) are in './config.sh'
 
-
 	options:
-	  -c : check mode	Make sure
+	  -c : [c]heck mode	Make sure
 	                          - none of the expected files (sounds, icons, ...) is missing
 	                          - the script can communicate with the phone
-	  -h : help		Display this message and exit
-	  -s : sound test	Play the notification sounds
+	  -h : [h]elp		Display this message and exit
+	  -s : [s]sound test	Play the notification sounds
 
 	EOUSAGE
 	}
