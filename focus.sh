@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 mode='default'
+subMode=''	# will be populated later
 
 usage() {
 	cat <<-EOUSAGE
@@ -21,6 +22,7 @@ usage() {
 	                          - none of the expected files (sounds, icons, ...) is missing
 	                          - the script can communicate with the phone
 	  -h : [h]elp		Display this message and exit
+	  -p : [p]hone only	Silence the connected phone only
 	  -s : [s]sound test	Play the notification sounds
 
 	EOUSAGE
@@ -105,7 +107,7 @@ toggleAirplaneMode() {
 
 
 enterFocusMode() {
-	silencePids rest
+	[ "$subMode" != 'phoneOnly' ] && silencePids rest
 	toggleAirplaneMode enable
 	displayNotification enterDnDMode	# must be done out of 'Do Not Disturb' mode ;-)
 	playSound "$soundStart"
@@ -116,7 +118,7 @@ enterFocusMode() {
 leaveFocusMode() {
 	toggleAirplaneMode disable
 	turnXfceDoNotDisturbMode off
-	silencePids wakeUp
+	[ "$subMode" != 'phoneOnly' ] && silencePids wakeUp
 	displayNotification leaveDnDMode	# must be done out of 'Do Not Disturb' mode ;-)
 	playSound "$soundStop"
 	}
@@ -221,14 +223,12 @@ makeListOfPidsToSilence() {
 
 getCliParameters() {
 	# NB: it is OK to invoke this script without arguments
-	while getopts ':chs' opt; do
+	while getopts ':chps' opt; do
 		case "$opt" in
-			c)	mode='check'	;;
-
-			h)	usage; exit 0	;;
-
+			c)	mode='check'		;;
+			h)	usage; exit 0		;;
+			p)	mode='default'; subMode='phoneOnly'	;;
 			s)	mode='soundTest'	;;
-
 			\?)	echo "Invalid option: '-$OPTARG'"; usage; exit 1 ;;
 		esac
 	done
@@ -266,7 +266,7 @@ mode_soundTest() {
 
 mode_default() {
 	dontStartWithUnauthorizedPhone
-	makeListOfPidsToSilence
+	[ "$subMode" != 'phoneOnly' ] && makeListOfPidsToSilence
 	enterFocusMode
 	sleep "$focusDurationMinutes"m
 	leaveFocusMode
