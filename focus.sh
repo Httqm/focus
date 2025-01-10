@@ -249,9 +249,7 @@ mode_check() {
 
 mode_soundTest() {
 	echo "'sound test' mode :"
-	while read soundData; do
-		soundEventName=$(echo "$soundData" | cut -d'|' -f1)
-		soundFileName=$( echo "$soundData" | cut -d'|' -f2)
+	while IFS='|' read soundEventName soundFileName; do
 		echo -e " - $soundEventName:\t'$soundFileName'"
 		playSound "$soundFileName"
 	done < <(cat <<-EOF
